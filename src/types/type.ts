@@ -70,7 +70,7 @@ export interface Testimonials {
   rating: number;
 }
 
-export interface Faq {
+export interface Faqs {
   id: number;
   question: string;
   answer: string;

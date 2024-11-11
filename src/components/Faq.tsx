@@ -1,15 +1,15 @@
 import { useEffect, useState } from "react";
-import { Faq } from "../types/type";
+import { Faqs } from "../types/type";
 import axios from "axios";
 
 export default function Faq() {
-  const [faqs, setFaqs] = useState<Faq[]>([]);
+  const [faqs, setFaqs] = useState<Faqs[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
     axios
-      .get<{ data: Faq[] }>("http://127.0.0.1:8000/api/faq")
+      .get<{ data: Faqs[] }>("http://127.0.0.1:8000/api/faq")
       .then((response) => {
         setFaqs(response.data.data);
         setLoading(false);
