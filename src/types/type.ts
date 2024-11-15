@@ -48,7 +48,8 @@ export interface Project {
   description: string;
   main_image: string;
   images: ProjectImage[];
-  service: string;
+  services: Service[];
+  skills: Skill[];
   client: string;
   project_url: string;
   github_url: string;
@@ -74,4 +75,42 @@ export interface Faqs {
   id: number;
   question: string;
   answer: string;
+}
+
+export interface ContactFormData {
+  name: string;
+  email: string;
+  subject: string;
+  budget: string;
+  message: string;
+}
+
+export interface Contact {
+  id: number;
+  name: string;
+  email: string;
+  subject: string;
+  budget: string;
+  message: string;
+  created_at: string;
+  updated_at: string;
+}
+
+export interface ContactResponse {
+  status: string;
+  message: string;
+  data: Contact;
+}
+
+export interface ValidationErrors {
+  name?: string[];
+  email?: string[];
+  subject?: string[];
+  budget?: string[];
+  message?: string[];
+}
+
+export interface SubmitStatus {
+  type: "success" | "error" | "";
+  message: string;
 }

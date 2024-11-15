@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import { Profile } from "../../types/type";
 import axios from "axios";
+import { ENDPOINTS } from "../../config/api";
 
 export default function AboutInfo() {
   const [profile, setProfile] = useState<Profile | null>(null);
@@ -9,7 +10,7 @@ export default function AboutInfo() {
 
   useEffect(() => {
     axios
-      .get<{ data: Profile }>("http://127.0.0.1:8000/api/profile")
+      .get<{ data: Profile }>(ENDPOINTS.PROFILE)
       .then((response) => {
         setProfile(response.data.data);
         setLoading(false);

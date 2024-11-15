@@ -1,3 +1,4 @@
+import { Link } from "react-router-dom";
 import Faq from "../components/Faq";
 import Footer from "../components/Footer";
 import Navbar from "../components/Navbar";
@@ -58,12 +59,12 @@ export default function Services() {
                     <div className='work-together-slider'>
                       <div className='slider-main d-flex gap-4 align-items-center'>
                         <div className='slider-item'>
-                          <a href='contact.html'>Let's 👋 Work Together</a>
-                          <a href='contact.html'>Let's 👋 Work Together</a>
+                          <Link to='/contact'>Let's 👋 Work Together</Link>
+                          <Link to='/contact'>Let's 👋 Work Together</Link>
                         </div>
                         <div className='slider-item'>
-                          <a href='contact.html'>Let's 👋 Work Together</a>
-                          <a href='contact.html'>Let's 👋 Work Together</a>
+                          <Link to='/contact'>Let's 👋 Work Together</Link>
+                          <Link to='/contact'>Let's 👋 Work Together</Link>
                         </div>
                       </div>
                     </div>

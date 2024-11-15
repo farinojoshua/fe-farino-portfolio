@@ -1,32 +1,50 @@
 import { useEffect, useState } from "react";
+import { Link } from "react-router-dom";
 import Footer from "../components/Footer";
 import Navbar from "../components/Navbar";
 import ProfileCard from "../components/ProfileCard";
 import { Project } from "../types/type";
 import axios from "axios";
-import { Link } from "react-router-dom";
+import { ENDPOINTS, getStorageUrl } from "../config/api";
 
 export default function Projects() {
   const [projects, setProjects] = useState<Project[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
-
-  const baseURL = "http://127.0.0.1:8000/storage/";
+  const [currentPage, setCurrentPage] = useState(1);
+  const [totalPages, setTotalPages] = useState(1);
 
   useEffect(() => {
+    setLoading(true);
     axios
-      .get<{ data: Project[] }>("http://127.0.0.1:8000/api/projects")
+      .get(`${ENDPOINTS.PROJECTS}?page=${currentPage}`)
       .then((response) => {
         setProjects(response.data.data);
+        setTotalPages(response.data.meta.last_page); // Total pages from API response
         setLoading(false);
       })
       .catch((error) => {
         setError(error.message);
         setLoading(false);
       });
-  }, []);
+  }, [currentPage]);
 
-  // Conditional rendering for loading and error states
+  const goToNextPage = () => {
+    if (currentPage < totalPages) {
+      setCurrentPage(currentPage + 1);
+    }
+  };
+
+  const goToPreviousPage = () => {
+    if (currentPage > 1) {
+      setCurrentPage(currentPage - 1);
+    }
+  };
+
+  const goToPage = (pageNumber: number) => {
+    setCurrentPage(pageNumber);
+  };
+
   if (loading) {
     return (
       <div id='page-content'>
@@ -100,12 +118,12 @@ export default function Projects() {
                             <div className='portfolio-item'>
                               <div className='image'>
                                 <img
-                                  src={baseURL + project.main_image}
+                                  src={getStorageUrl(project.main_image)}
                                   alt={project.name}
                                   className='img-fluid w-100'
                                 />
                                 <a
-                                  href={baseURL + project.main_image}
+                                  href={getStorageUrl(project.main_image)}
                                   className='gallery-popup full-image-preview parent-container'
                                 >
                                   <svg
@@ -130,14 +148,13 @@ export default function Projects() {
                                   >
                                     {project.name}
                                   </Link>
-                                  <p className='subtitle'>{project.service}</p>
+                                  <p className='subtitle'>
+                                    {project.skills[0].name} |{" "}
+                                    {project.services[0].name}
+                                  </p>
                                 </div>
                                 <div className='visite-btn'>
-                                  <a
-                                    href={project.project_url}
-                                    target='_blank'
-                                    rel='noopener noreferrer'
-                                  >
+                                  <a href={project.project_url}>
                                     Visit Site
                                     <svg
                                       className='arrow-up'
@@ -168,7 +185,10 @@ export default function Projects() {
                       <div className='pagination'>
                         <ul className='list-unstyled'>
                           <li className='prev'>
-                            <button>
+                            <button
+                              onClick={goToPreviousPage}
+                              disabled={currentPage === 1}
+                            >
                               <svg
                                 className='icon'
                                 xmlns='http://www.w3.org/2000/svg'
@@ -185,47 +205,23 @@ export default function Projects() {
                               </svg>
                             </button>
                           </li>
-                          <li>
-                            <button>1</button>
-                          </li>
-                          <li>
-                            <button>2</button>
-                          </li>
-                          <li>
-                            <button>3</button>
-                          </li>
-                          <li>
-                            <button className='next-page-btn'>
-                              <span className='dots'>
-                                <i className='fas fa-ellipsis-h' />
-                              </span>
-                              <span className='next-page'>
-                                <svg
-                                  className='icon icon-arrow-right'
-                                  xmlns='http://www.w3.org/2000/svg'
-                                  width={24}
-                                  height={24}
-                                  viewBox='0 0 24 24'
-                                  fill='none'
-                                  stroke='currentColor'
-                                  strokeWidth={2}
-                                  strokeLinecap='round'
-                                  strokeLinejoin='round'
-                                >
-                                  <path d='m6 17 5-5-5-5' />
-                                  <path d='m13 17 5-5-5-5' />
-                                </svg>
-                              </span>
-                              <span className='next-page-number'>
-                                Next 4 pages
-                              </span>
-                            </button>
-                          </li>
-                          <li>
-                            <button>100</button>
-                          </li>
+                          {[...Array(totalPages)].map((_, index) => (
+                            <li key={index + 1}>
+                              <button
+                                onClick={() => goToPage(index + 1)}
+                                className={
+                                  currentPage === index + 1 ? "active" : ""
+                                }
+                              >
+                                {index + 1}
+                              </button>
+                            </li>
+                          ))}
                           <li className='next'>
-                            <button>
+                            <button
+                              onClick={goToNextPage}
+                              disabled={currentPage === totalPages}
+                            >
                               <svg
                                 className='icon'
                                 xmlns='http://www.w3.org/2000/svg'
@@ -248,12 +244,12 @@ export default function Projects() {
                     <div className='work-together-slider'>
                       <div className='slider-main d-flex gap-4 align-items-center'>
                         <div className='slider-item'>
-                          <a href='contact.html'>Let's 👋 Work Together</a>
-                          <a href='contact.html'>Let's 👋 Work Together</a>
+                          <Link to='/contact'>Let's 👋 Work Together</Link>
+                          <Link to='/contact'>Let's 👋 Work Together</Link>
                         </div>
                         <div className='slider-item'>
-                          <a href='contact.html'>Let's 👋 Work Together</a>
-                          <a href='contact.html'>Let's 👋 Work Together</a>
+                          <Link to='/contact'>Let's 👋 Work Together</Link>
+                          <Link to='/contact'>Let's 👋 Work Together</Link>
                         </div>
                       </div>
                     </div>
@@ -282,7 +278,15 @@ export default function Projects() {
       </main>
       {/* main area part end */}
       {/* footer part start */}
-      <Footer></Footer>
+      <footer className='footer-area'>
+        <div className='container'>
+          <div className='text text-center'>
+            <p>
+              @ BentoFolio 2024, Design By <a href='#'>MarvelTheme</a>
+            </p>
+          </div>
+        </div>
+      </footer>
       {/* footer part end */}
     </div>
   );

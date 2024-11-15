@@ -1,17 +1,17 @@
 import { useEffect, useState } from "react";
 import { Service } from "../../types/type";
 import axios from "axios";
+import { ENDPOINTS, getStorageUrl } from "../../config/api";
+import { Link } from "react-router-dom";
 
 export default function HomeServiceWrapper() {
   const [services, setServices] = useState<Service[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
 
-  const baseURL = "http://127.0.0.1:8000/storage/";
-
   useEffect(() => {
     axios
-      .get<{ data: Service[] }>("http://127.0.0.1:8000/api/services")
+      .get<{ data: Service[] }>(ENDPOINTS.SERVICES)
       .then((response) => {
         setServices(response.data.data);
         setLoading(false);
@@ -77,7 +77,10 @@ export default function HomeServiceWrapper() {
                   <div key={service.id} className='col-md-3 col-sm-6 col-6'>
                     <div className='services-item text-center'>
                       <div className='image'>
-                        <img src={baseURL + service.icon} alt={service.name} />
+                        <img
+                          src={getStorageUrl(service.icon)}
+                          alt={service.name}
+                        />
                       </div>
                       <div className='text'>
                         <h3 className='title'>{service.name}</h3>
@@ -106,7 +109,7 @@ export default function HomeServiceWrapper() {
               Let's👋
               <span className='d-block'>Work Together</span>
             </h3>
-            <a className='link-btn' href='contact.html'>
+            <Link className='link-btn' to='/contact'>
               Let's Talk
               <svg
                 className='icon'
@@ -129,7 +132,7 @@ export default function HomeServiceWrapper() {
                   strokeLinejoin='round'
                 />
               </svg>
-            </a>
+            </Link>
           </div>
         </div>
       </div>

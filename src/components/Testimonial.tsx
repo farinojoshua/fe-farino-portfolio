@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import { Testimonials } from "../types/type";
 import axios from "axios";
+import { ENDPOINTS } from "../config/api";
 
 export default function Testimonial() {
   const [testimonials, setTestimonials] = useState<Testimonials[]>([]);
@@ -9,7 +10,7 @@ export default function Testimonial() {
 
   useEffect(() => {
     axios
-      .get<{ data: Testimonials[] }>("http://127.0.0.1:8000/api/testimonials")
+      .get<{ data: Testimonials[] }>(ENDPOINTS.TESTIMONIALS)
       .then((response) => {
         setTestimonials(response.data.data);
         setLoading(false);

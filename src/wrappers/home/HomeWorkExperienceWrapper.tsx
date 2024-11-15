@@ -1,19 +1,16 @@
 import { useEffect, useState } from "react";
 import { WorkExperience } from "../../types/type";
 import axios from "axios";
+import { ENDPOINTS, getStorageUrl } from "../../config/api";
 
 export default function HomeWorkExperienceWrapper() {
   const [WorkExperience, setWorkExperience] = useState<WorkExperience[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
 
-  const baseURL = "http://127.0.0.1:8000/storage/";
-
   useEffect(() => {
     axios
-      .get<{ data: WorkExperience[] }>(
-        "http://127.0.0.1:8000/api/work-experience"
-      )
+      .get<{ data: WorkExperience[] }>(ENDPOINTS.WORK_EXPERIENCE)
       .then((response) => {
         setWorkExperience(response.data.data);
         setLoading(false);
@@ -56,7 +53,7 @@ export default function HomeWorkExperienceWrapper() {
                 <div className='info'>
                   <div className='icon'>
                     <img
-                      src={baseURL + experience.company_logo}
+                      src={getStorageUrl(experience.company_logo)}
                       alt={experience.company_name}
                     />
                   </div>
@@ -87,7 +84,7 @@ export default function HomeWorkExperienceWrapper() {
                 <div className='info'>
                   <div className='icon'>
                     <img
-                      src={baseURL + experience.company_logo}
+                      src={getStorageUrl(experience.company_logo)}
                       alt={experience.company_name}
                     />
                   </div>

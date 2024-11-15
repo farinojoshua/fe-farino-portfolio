@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import { Faqs } from "../types/type";
 import axios from "axios";
+import { ENDPOINTS } from "../config/api";
 
 export default function Faq() {
   const [faqs, setFaqs] = useState<Faqs[]>([]);
@@ -9,7 +10,7 @@ export default function Faq() {
 
   useEffect(() => {
     axios
-      .get<{ data: Faqs[] }>("http://127.0.0.1:8000/api/faq")
+      .get<{ data: Faqs[] }>(ENDPOINTS.FAQS)
       .then((response) => {
         setFaqs(response.data.data);
         setLoading(false);

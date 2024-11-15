@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import { Profile, SocialMedia } from "../types/type";
 import axios from "axios";
+import { ENDPOINTS, getStorageUrl } from "../config/api";
 
 export default function ProfileCard() {
   const [profile, setProfile] = useState<Profile | null>(null);
@@ -8,18 +9,16 @@ export default function ProfileCard() {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
 
-  const baseURL = "http://127.0.0.1:8000/storage/";
-
   useEffect(() => {
     axios
-      .get<{ data: Profile }>("http://127.0.0.1:8000/api/profile")
+      .get<{ data: Profile }>(ENDPOINTS.PROFILE)
       .then((response) => {
         setProfile(response.data.data);
       })
       .catch((error) => setError(error.message));
 
     axios
-      .get<{ data: SocialMedia[] }>("http://127.0.0.1:8000/api/social-media")
+      .get<{ data: SocialMedia[] }>(ENDPOINTS.SOCIAL_MEDIA)
       .then((response) => {
         setSocialMedia(response.data.data);
       })
@@ -44,7 +43,7 @@ export default function ProfileCard() {
       <div className='card-body'>
         <div className='image text-center'>
           <img
-            src={`${baseURL}${profile.profile_image}`}
+            src={getStorageUrl(profile.profile_image)}
             alt='profile'
             style={{ width: "180px", height: "250px", objectFit: "cover" }}
           />

@@ -1,13 +1,12 @@
 import { useEffect, useState } from "react";
 import { Project } from "../../types/type";
 import axios from "axios";
+import { getStorageUrl } from "../../config/api";
 
 export default function HomeProjectWrapper() {
   const [projects, setProjects] = useState<Project[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
-
-  const baseURL = "http://127.0.0.1:8000/storage/";
 
   useEffect(() => {
     axios
@@ -71,16 +70,16 @@ export default function HomeProjectWrapper() {
         <div className='projects-main mt-24'>
           <div className='row g-4 parent-container'>
             {projects.slice(0, 2).map((project) => (
-              <div className='col-lg-12'>
+              <div className='col-lg-12' key={project.id}>
                 <div className='project-item'>
                   <div className='image'>
                     <img
-                      src={baseURL + project.main_image}
+                      src={getStorageUrl(project.main_image)}
                       alt={project.name}
                       className='img-fluid w-100'
                     />
                     <a
-                      href={baseURL + project.main_image}
+                      href={getStorageUrl(project.main_image)}
                       className='gallery-popup full-image-preview parent-container'
                     >
                       <svg
@@ -97,7 +96,9 @@ export default function HomeProjectWrapper() {
                       </svg>
                     </a>
                     <div className='info'>
-                      <span className='category'>{project.service}</span>
+                      <span className='category'>
+                        {project.services[0].name}
+                      </span>
                     </div>
                   </div>
                 </div>
