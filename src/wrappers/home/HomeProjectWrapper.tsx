@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { Project } from "../../types/type";
 import axios from "axios";
-import { getStorageUrl } from "../../config/api";
+import { ENDPOINTS, getStorageUrl } from "../../config/api";
 
 export default function HomeProjectWrapper() {
   const [projects, setProjects] = useState<Project[]>([]);
@@ -10,7 +10,7 @@ export default function HomeProjectWrapper() {
 
   useEffect(() => {
     axios
-      .get<{ data: Project[] }>("http://127.0.0.1:8000/api/projects")
+      .get<{ data: Project[] }>(ENDPOINTS.PROJECTS)
       .then((response) => {
         setProjects(response.data.data);
         setLoading(false);

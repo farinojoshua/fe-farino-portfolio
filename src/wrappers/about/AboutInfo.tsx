@@ -26,7 +26,6 @@ export default function AboutInfo() {
     return <p>Error: {error}</p>;
   }
 
-  // Extract only the first name
   const firstName = profile?.name.split(" ")[0];
 
   return (
